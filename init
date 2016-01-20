@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# give Flash Player permission to read files from the repositories
+echo $(cygpath -w `pwd`/`dirname "$0"`) > ~/"AppData/Roaming/Macromedia/Flash Player/#Security/FlashPlayerTrust/apache-flex-build.cfg" &&
+
+# clone all repositories
+git clone https://git-wip-us.apache.org/repos/asf/flex-asjs flex-asjs             && pushd flex-asjs     && git checkout develop && popd &&
+git clone https://git-wip-us.apache.org/repos/asf/flex-falcon.git flex-falcon     && pushd flex-falcon   && git checkout develop && popd &&
+git clone https://git-wip-us.apache.org/repos/asf/flex-flexunit.git flex-flexunit && pushd flex-flexunit && git checkout develop && popd &&
+git clone https://git-wip-us.apache.org/repos/asf/flex-sdk.git flex-sdk           && pushd flex-sdk      && git checkout develop && popd &&
+git clone https://git-wip-us.apache.org/repos/asf/flex-tlf.git flex-tlf           && pushd flex-tlf      && git checkout develop && popd &&
+git clone https://git-wip-us.apache.org/repos/asf/flex-blazeds.git flex-blazeds   && pushd flex-blazeds  && git checkout develop && popd &&
+
+# Apply patch to flex-asjs/build.xml (temporary solution).
+# Fixes problem in basictests-compile-js build target that makes it incompatible with auto-extracted closure-compiler folder logic.
+# This change needs to be reviewed.
+pushd flex-asjs && git apply ../patch-build-xml.diff && popd

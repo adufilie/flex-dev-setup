@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# Use firefox instead of IE because IE requires user interaction to enable Flash Player for each test.
+BROWSER=/c/Program\ Files\ \(x86\)/Mozilla\ Firefox/firefox.exe
+
+# run ant targets in this order for flex-asjs build to succeed
+yes | ant -f flex-sdk binary-release -Dbrowser=${BROWSER} &&
+yes | ant -f flex-flexunit -Denv.FLEX_HOME=$(cygpath -w `pwd`/flex-sdk) &&
+yes | ant -f flex-falcon binary-release &&
+yes | ant -f flex-asjs binary-release -Dbrowser=${BROWSER}
+
+# I still don't see an output folder that matches what we get from installing the nightly build of FlexJS...
